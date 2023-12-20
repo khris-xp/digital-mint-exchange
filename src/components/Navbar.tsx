@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 export default function Navbar() {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState<boolean>(false)
 
     const handleOpenNavbar = (): void => {
         setIsOpen(!isOpen)
@@ -33,6 +33,8 @@ export default function Navbar() {
                         <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="#">Security</a>
                         <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="#">Token List</a>
                         <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="#">Contact Us</a>
+                        <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="/login">Login</a>
+                        <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="/register">Register</a>
                     </div>
                 </div>
             </div>
