@@ -1,4 +1,5 @@
 import ContactUs from "@/components/ContactUs"
+import CryptoTable from "@/components/CryptoTable"
 import Feature from "@/components/Feature"
 import Hero from "@/components/Hero"
 import PhoneAuthentication from "@/components/PhoneAuthentication"
@@ -9,6 +10,7 @@ export default function HomePage() {
             <Hero />
             <Feature />
             <PhoneAuthentication />
+            <CryptoTable />
             <ContactUs />
         </div>
     )
