@@ -1,11 +1,6 @@
 export default function CryptoTable() {
     return (
-        <section className="container px-4 mx-auto py-20">
-            <div className="flex items-center gap-x-3 mb-10">
-                <h2 className="text-3xl font-medium text-blue-600">KTD MPC PROTECTED CUSTODIAL ARCHITECTURE
-                    FOR MORE THAN 200 DIGITAL ASSETS</h2>
-            </div>
-
+        <section className="container px-4 mx-auto">
             <div className="flex flex-col mt-6">
                 <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">

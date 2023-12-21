@@ -10,6 +10,10 @@ export default function HomePage() {
             <Hero />
             <Feature />
             <PhoneAuthentication />
+            <div className="flex items-center gap-x-3 mb-10 pt-20">
+                <h2 className="text-3xl font-medium text-blue-600">KTD MPC PROTECTED CUSTODIAL ARCHITECTURE
+                    FOR MORE THAN 200 DIGITAL ASSETS</h2>
+            </div>
             <CryptoTable />
             <ContactUs />
         </div>
