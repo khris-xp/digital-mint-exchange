@@ -24,11 +24,11 @@ export default function HomePage() {
     }, [page])
 
     const handleNextPage = () => {
-        setPage(page + 1)
+        setPage(page + 10)
     }
 
     const handlePreviousPage = () => {
-        setPage(page - 1)
+        setPage(page - 10)
     }
 
     const handlePage = (page: number) => {
