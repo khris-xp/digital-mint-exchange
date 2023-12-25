@@ -1,11 +1,30 @@
-import { useState } from "react"
+import { authService } from "@/services/auth.service";
+import { UserType } from "@/types/user.type";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [user, setUser] = useState<UserType | null>(null);
 
     const handleOpenNavbar = (): void => {
         setIsOpen(!isOpen)
     }
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await authService.getUserProfile();
+                if (response) {
+                    setUser(response);
+                } else {
+                    setUser(null);
+                }
+            } catch (err) {
+                console.log(err)
+            }
+        };
+        fetchUser();
+    }, []);
     return (
         <nav className="relative bg-white">
             <div className="container px-6 py-4 mx-auto md:flex md:justify-between md:items-center">
@@ -33,8 +52,15 @@ export default function Navbar() {
                         <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="#">Security</a>
                         <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="#">Token List</a>
                         <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="#">Contact Us</a>
-                        <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="/login">Login</a>
-                        <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="/register">Register</a>
+                        {user ? (
+                            <div>
+                                <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="/profile">Profile</a>
+                            </div>) : (
+                            <div>
+                                <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="/login">Login</a>
+                                <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="/register">Register</a>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

@@ -1,4 +1,23 @@
+import { authService } from "@/services/auth.service";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 export default function RegisterPage() {
+    const [userData, setUserData] = useState({ username: '', email: '', password: '' });
+    const navigate = useNavigate();
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+        event.preventDefault();
+        try {
+            const username = userData.username;
+            const email = userData.email;
+            const password = userData.password;
+            await authService.register({ username, email, password });
+            window.alert('Register Success');
+            navigate('/login');
+        } catch (error) {
+            window.alert('Register Failed');
+        }
+    }
     return (
         <div className="flex justify-center h-screen bg-white">
             <div className="hidden bg-cover lg:block lg:w-2/3 bg-[url('https://images.unsplash.com/photo-1616763355603-9755a640a287?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')]">
@@ -21,24 +40,42 @@ export default function RegisterPage() {
                         <p className="mt-3 text-gray-500">Sign in to access your account</p>
                     </div>
                     <div className="mt-8">
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <div>
                                 <label htmlFor="username" className="block mb-2 text-sm text-gray-600">Username</label>
-                                <input type="text" name="username" id="username" placeholder="Your Username" className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                                <input type="text" name="username" id="username" placeholder="Your Username" className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                                    onChange={(e) => {
+                                        setUserData({ ...userData, username: e.target.value });
+                                        e.preventDefault();
+                                    }}
+                                    required
+                                />
                             </div>
                             <div className="mt-6">
                                 <label htmlFor="email" className="block mb-2 text-sm text-gray-600">Email Address</label>
-                                <input type="email" name="email" id="email" placeholder="example@example.com" className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                                <input type="email" name="email" id="email" placeholder="example@example.com" className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                                    onChange={(e) => {
+                                        setUserData({ ...userData, email: e.target.value });
+                                        e.preventDefault();
+                                    }}
+                                    required
+                                />
                             </div>
                             <div className="mt-6">
                                 <div className="flex justify-between mb-2">
                                     <label htmlFor="password" className="text-sm text-gray-600">Password</label>
                                 </div>
 
-                                <input type="password" name="password" id="password" placeholder="Your Password" className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                                <input type="password" name="password" id="password" placeholder="Your Password" className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                                    onChange={(e) => {
+                                        setUserData({ ...userData, password: e.target.value });
+                                        e.preventDefault();
+                                    }}
+                                    required
+                                />
                             </div>
                             <div className="mt-6">
-                                <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:bg-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                                <button type="submit" className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:bg-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                                     Sign up
                                 </button>
                             </div>
