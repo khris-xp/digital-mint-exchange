@@ -1,3 +1,4 @@
+import MartketTable from "@/components/MartketTable";
 import Portfolio from "@/components/Portfolio";
 import { authService } from "@/services/auth.service";
 import { UserType } from "@/types/user.type";
@@ -64,8 +65,11 @@ export default function ProfilePage() {
                     <h1 className="text-4xl font-medium text-gray-700">{user?.username} <span className="font-light text-gray-500">{user?.token}</span></h1>
                     <p className="font-light text-gray-600 mt-3">{user?.email}</p>
                 </div>
-                <div className="pt-20">
+                <div className="pt-20 border-b pb-12">
                     <Portfolio />
+                </div>
+                <div className="pt-10">
+                    <MartketTable />
                 </div>
             </div>
         </div>
