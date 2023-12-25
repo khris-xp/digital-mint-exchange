@@ -1,7 +1,7 @@
 export default function ContactUs() {
     return (
         <section className="bg-white">
-            <div className="container px-6 py-12 mx-auto">
+            <div className="container px-6 pt-20 lg:pt-32 pb-5 mx-auto">
                 <div className="text-center">
                     <p className="font-medium text-blue-500">Contact us</p>
 
