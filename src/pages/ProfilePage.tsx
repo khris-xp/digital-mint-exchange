@@ -6,7 +6,23 @@ import { useEffect, useState } from "react";
 
 export default function ProfilePage() {
     const [user, setUser] = useState<UserType | null>(null);
+    const [token, setToken] = useState<number | null>(null);
 
+    function openModal(): void {
+        const modal = document.getElementById('add_token') as HTMLDialogElement | null;
+        if (modal) {
+            modal.showModal();
+        }
+    }
+
+    async function addToken(): Promise<void> {
+        if (token) {
+            await authService.addToken({ token: token });
+            const response = await authService.getUserProfile();
+            setUser(response);
+            setToken(null);
+        }
+    }
     useEffect(() => {
         const fetchUser = async () => {
             try {
@@ -21,7 +37,7 @@ export default function ProfilePage() {
             }
         };
         fetchUser();
-    }, []);
+    }, [token]);
     return (
         <div className="p-16">
             <div className="p-8 bg-white shadow mt-24">
@@ -50,15 +66,27 @@ export default function ProfilePage() {
 
                     <div className="space-x-8 flex justify-between mt-32 md:mt-0 md:justify-center">
                         <button
+                            onClick={openModal}
                             className="text-white py-2 px-4 uppercase rounded bg-blue-400 hover:bg-blue-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
                         >
-                            Connect
+                            Add Token
                         </button>
-                        <button
-                            className="text-white py-2 px-4 uppercase rounded bg-gray-700 hover:bg-gray-800 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
-                        >
-                            Message
-                        </button>
+                        <dialog id="add_token" className="modal">
+                            <div className="modal-box">
+                                <h3 className="font-bold text-lg">Add your token!</h3>
+                                <input type="number" placeholder="Your token" className="input input-bordered w-full mt-5"
+                                    onChange={(e) => setToken(parseInt(e.target.value))}
+                                />
+                                <div className="flex justify-between items-center mt-5">
+                                    <button onClick={addToken} className="font-bold bg-blue-500 text-white px-5 py-2 rounded-xl hover:bg-blue-600">
+                                        Submit
+                                    </button>
+                                    <form method="dialog">
+                                        <button className="font-bold">Close</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </dialog>
                     </div>
                 </div>
                 <div className="mt-20 text-center border-b pb-12">

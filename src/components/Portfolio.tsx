@@ -27,7 +27,7 @@ export default function Portfolio() {
         } else if (user && currency.length === 0) {
             fetchWallet();
         }
-    }, [user, currency]);
+    }, []);
 
     return (
         <section className="container px-4 mx-auto">
@@ -39,7 +39,7 @@ export default function Portfolio() {
                     <button
                         className="text-white py-2 px-4 uppercase rounded bg-blue-400 hover:bg-blue-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
                     >
-                        Add Token
+                        Add Coin
                     </button>
                 </div>
             </div>

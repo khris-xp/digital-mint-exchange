@@ -42,5 +42,8 @@ export type UpdateCoinType = {
     image: string;
     max_supply: number;
     rate: number;
+}
 
+export type AddTokenType = {
+    token: number;
 }
