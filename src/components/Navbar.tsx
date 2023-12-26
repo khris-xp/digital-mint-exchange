@@ -1,5 +1,6 @@
 import { authService } from "@/services/auth.service";
 import { UserType } from "@/types/user.type";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 
 export default function Navbar() {
@@ -8,6 +9,11 @@ export default function Navbar() {
 
     const handleOpenNavbar = (): void => {
         setIsOpen(!isOpen)
+    }
+
+    const handleLogout = async (): Promise<void> => {
+        setUser(null);
+        Cookies.remove('token');
     }
 
     useEffect(() => {
@@ -55,6 +61,7 @@ export default function Navbar() {
                         {user ? (
                             <div>
                                 <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="/profile">Profile</a>
+                                <button onClick={handleLogout} className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0">Logout</button>
                             </div>) : (
                             <div>
                                 <a className="my-2 text-gray-700 transition-colors duration-300 transform hover:text-blue-500 md:mx-4 md:my-0" href="/login">Login</a>

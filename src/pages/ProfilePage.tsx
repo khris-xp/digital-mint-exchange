@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 export default function ProfilePage() {
     const [user, setUser] = useState<UserType | null>(null);
     const [token, setToken] = useState<number | null>(null);
-
+    
     function openModal(): void {
         const modal = document.getElementById('add_token') as HTMLDialogElement | null;
         if (modal) {

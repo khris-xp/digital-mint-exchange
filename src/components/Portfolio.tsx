@@ -2,7 +2,7 @@ import { authService } from "@/services/auth.service"
 import { coinService } from "@/services/coin.service"
 import { walletService } from "@/services/wallet.service"
 import { CoinType } from "@/types/coin.type"
-import { CreateWalletType, SellWalletType } from "@/types/request.type"
+import { CreateWalletType, SellWalletType, TransferWalletType } from "@/types/request.type"
 import { UserType } from "@/types/user.type"
 import { WalletType } from "@/types/wallet.type"
 import { useEffect, useState } from "react"
@@ -14,6 +14,8 @@ export default function Portfolio() {
     const [coin, setCoin] = useState<CoinType[]>([]);
     const [createWallet, setCreateWallet] = useState({ coin_id: '', amount: 0 });
     const [sellWallet, setSellWallet] = useState({ coin_id: '', amount: 0 });
+    const [tradeWallet, setTradeWallet] = useState({ coin_id: '', amount: 0, transfer_id: '' });
+    const [allUser, setAllUser] = useState<UserType[]>([]);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -42,6 +44,19 @@ export default function Portfolio() {
     }, []);
 
     useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await authService.getAllUsers();
+                setAllUser(response);
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        };
+
+        fetchUser();
+    }, []);
+
+    useEffect(() => {
         const fetchWallet = async () => {
             try {
                 if (user) {
@@ -63,7 +78,7 @@ export default function Portfolio() {
         }
     };
 
-    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>, setter: React.Dispatch<React.SetStateAction<CreateWalletType | SellWalletType>>) => {
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>, setter: React.Dispatch<React.SetStateAction<CreateWalletType | SellWalletType | TransferWalletType>>) => {
         const selectedCoinId = e.target.value;
         setter((prev: CreateWalletType | SellWalletType) => ({ ...prev, coin_id: selectedCoinId }));
     };
@@ -83,6 +98,14 @@ export default function Portfolio() {
             console.error('Error selling wallet:', error);
         }
     };
+
+    const handleTradeWallet = async (): Promise<void> => {
+        try {
+            await walletService.tradeWallet(tradeWallet);
+        } catch (error) {
+            console.error('Error trading wallet:', error);
+        }
+    }
 
     return (
         <section className="container px-4 mx-auto">
@@ -104,7 +127,7 @@ export default function Portfolio() {
                         Sell Coin
                     </button>
                     <button
-                        onClick={() => openModal("sell_coin")}
+                        onClick={() => openModal("trade_coin")}
                         className="text-white py-2 px-4 uppercase rounded bg-gray-700 hover:bg-gray-900 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
                     >
                         Trade
@@ -180,8 +203,84 @@ export default function Portfolio() {
                                     onChange={(e) => setSellWallet({ ...sellWallet, amount: parseInt(e.target.value) })}
                                 />
                             </label>
+                            <label className="form-control w-full">
+                                <div className="label">
+                                    <span className="label-text">Select who do you want to transfer</span>
+                                </div>
+                                <select
+                                    className="select select-bordered"
+                                    onChange={(e) => handleSelectChange(e, setSellWallet)}
+                                    value={sellWallet.coin_id}
+                                >
+                                    <option disabled value="">
+                                        Pick one
+                                    </option>
+                                    {coin.map((item) => (
+                                        <option key={item.id} value={item.id}>
+                                            {item.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
                             <div className="flex justify-end">
                                 <button onClick={handleSellWallet} className="mt-5 bg-blue-500 p-3 text-white rounded-2xl hover:bg-blue-600 duration-100">Submit</button>
+                            </div>
+                        </div>
+                    </dialog>
+                    <dialog id="trade_coin" className="modal">
+                        <div className="modal-box">
+                            <form method="dialog">
+                                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                            </form>
+                            <h3 className="font-bold text-lg">Trade Your Coin!</h3>
+                            <label className="form-control w-full">
+                                <div className="label">
+                                    <span className="label-text">Select your coin</span>
+                                </div>
+                                <select
+                                    className="select select-bordered"
+                                    onChange={(e) => setTradeWallet({ ...tradeWallet, coin_id: e.target.value })}
+                                    value={tradeWallet.coin_id}
+                                >
+                                    <option disabled value="">
+                                        Pick one
+                                    </option>
+                                    {coin.map((item) => (
+                                        <option key={item.id} value={item.id}>
+                                            {item.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
+                            <label className="form-control w-full">
+                                <div className="label">
+                                    <span className="label-text">What is your amount?</span>
+                                </div>
+                                <input type="number" placeholder="Your amount" className="input input-bordered w-full"
+                                    onChange={(e) => setTradeWallet({ ...tradeWallet, amount: parseInt(e.target.value) })}
+                                />
+                            </label>
+                            <label className="form-control w-full">
+                                <div className="label">
+                                    <span className="label-text">Select who you want to trade</span>
+                                </div>
+                                <select
+                                    className="select select-bordered"
+                                    onChange={(e) => setTradeWallet({ ...tradeWallet, transfer_id: e.target.value })}
+                                    value={tradeWallet.transfer_id}
+                                >
+                                    <option disabled value="">
+                                        Pick one
+                                    </option>
+                                    {allUser.map((item) => (
+                                        <option key={item.id} value={item.id}>
+                                            {item.username}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
+                            <div className="flex justify-end">
+                                <button onClick={handleTradeWallet} className="mt-5 bg-blue-500 p-3 text-white rounded-2xl hover:bg-blue-600 duration-100">Submit</button>
                             </div>
                         </div>
                     </dialog>

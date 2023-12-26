@@ -11,6 +11,8 @@ export const authService = {
         authRepository<AuthResponseType>('/auth/sign-up', 'post', registerRequest),
     getUserProfile: async () =>
         apiRepository<UserType>('/auth/profile', 'get'),
+    getAllUsers: async () => 
+        apiRepository<UserType[]>('/auth/users', 'get'),
     addToken: async (token: AddTokenType) => {
         apiRepository<UserType>('/auth/add-token', 'put', token)
     }
