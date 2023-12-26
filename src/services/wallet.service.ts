@@ -1,5 +1,5 @@
 import { apiRepository } from "@/repositories/api.repository";
-import { CreateWalletType, UpdateWalletType } from "@/types/request.type";
+import { CreateWalletType, SellWalletType, UpdateWalletType } from "@/types/request.type";
 import { WalletType } from "@/types/wallet.type";
 
 export const walletService = {
@@ -15,4 +15,6 @@ export const walletService = {
         apiRepository<WalletType>('/wallets', 'put', wallet),
     deleteWallet: async (id: number) =>
         apiRepository<WalletType>(`/wallets/${id}`, 'delete'),
+    sellWallet: async (wallet: SellWalletType) => 
+        apiRepository<WalletType>('/wallet/sell', 'post', wallet),
 };
