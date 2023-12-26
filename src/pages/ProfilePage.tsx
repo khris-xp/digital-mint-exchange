@@ -16,10 +16,19 @@ export default function ProfilePage() {
     }
 
     async function addToken(): Promise<void> {
-        if (token) {
-            await authService.addToken({ token: token });
-            setToken(null);
-            fetchUser();
+        try {
+            if (token) {
+                const response = await authService.addToken({ token: token });
+                if (response) {
+                    alert("Token added!");
+                } else {
+                    alert("Token not added!");
+                }
+                setToken(null);
+                fetchUser();
+            }
+        } catch (error) {
+            alert("Token not added!");
         }
     }
 

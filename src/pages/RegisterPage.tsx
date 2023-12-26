@@ -12,10 +12,10 @@ export default function RegisterPage() {
             const email = userData.email;
             const password = userData.password;
             await authService.register({ username, email, password });
-            window.alert('Register Success');
+            alert('Register Success');
             navigate('/login');
         } catch (error) {
-            window.alert('Register Failed');
+            alert('Register Failed');
         }
     }
     return (

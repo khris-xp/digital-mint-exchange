@@ -14,6 +14,6 @@ export async function authRepository<T>(
         return response.data;
     } catch (error) {
         const message = (error as Error).message;
-        throw new Error(message);
+        return message as unknown as T;
     }
 }
