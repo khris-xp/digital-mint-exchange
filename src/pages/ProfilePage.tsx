@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 export default function ProfilePage() {
     const [user, setUser] = useState<UserType | null>(null);
     const [token, setToken] = useState<number | null>(null);
-    
+
     function openModal(): void {
         const modal = document.getElementById('add_token') as HTMLDialogElement | null;
         if (modal) {
@@ -18,11 +18,24 @@ export default function ProfilePage() {
     async function addToken(): Promise<void> {
         if (token) {
             await authService.addToken({ token: token });
-            const response = await authService.getUserProfile();
-            setUser(response);
             setToken(null);
+            fetchUser();
         }
     }
+
+    const fetchUser = async () => {
+        try {
+            const response = await authService.getUserProfile();
+            if (response) {
+                setUser(response);
+            } else {
+                setUser(null);
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    };
+
     useEffect(() => {
         const fetchUser = async () => {
             try {
@@ -78,9 +91,11 @@ export default function ProfilePage() {
                                     onChange={(e) => setToken(parseInt(e.target.value))}
                                 />
                                 <div className="flex justify-between items-center mt-5">
-                                    <button onClick={addToken} className="font-bold bg-blue-500 text-white px-5 py-2 rounded-xl hover:bg-blue-600">
-                                        Submit
-                                    </button>
+                                    <form method="dialog">
+                                        <button onClick={addToken} className="font-bold bg-blue-500 text-white px-5 py-2 rounded-xl hover:bg-blue-600">
+                                            Submit
+                                        </button>
+                                    </form>
                                     <form method="dialog">
                                         <button className="font-bold">Close</button>
                                     </form>

@@ -12,10 +12,30 @@ export default function Portfolio() {
     const [currency, setCurrency] = useState<WalletType[]>([]);
     const [user, setUser] = useState<UserType | undefined>();
     const [coin, setCoin] = useState<CoinType[]>([]);
-    const [createWallet, setCreateWallet] = useState({ coin_id: '', amount: 0 });
-    const [sellWallet, setSellWallet] = useState({ coin_id: '', amount: 0 });
-    const [tradeWallet, setTradeWallet] = useState({ coin_id: '', amount: 0, transfer_id: '' });
+    const [createWallet, setCreateWallet] = useState<CreateWalletType>({ coin_id: '', amount: 0 });
+    const [sellWallet, setSellWallet] = useState<SellWalletType>({ coin_id: '', amount: 0 });
+    const [tradeWallet, setTradeWallet] = useState<TransferWalletType>({ coin_id: '', amount: 0, transfer_id: '' });
     const [allUser, setAllUser] = useState<UserType[]>([]);
+
+    const fetchWallet = async () => {
+        try {
+            if (user) {
+                const wallet = await walletService.getWalletByOwnerId(user.id);
+                setCurrency(wallet);
+            }
+        } catch (error) {
+            console.error('Error fetching wallet:', error);
+        }
+    };
+
+    const fetchUser = async () => {
+        try {
+            const fetchedUser = await authService.getUserProfile();
+            setUser(fetchedUser);
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    };
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -86,6 +106,8 @@ export default function Portfolio() {
     const handleCreateWallet = async (): Promise<void> => {
         try {
             await walletService.createWallet(createWallet);
+            fetchWallet();
+            fetchUser();
         } catch (error) {
             console.error('Error creating wallet:', error);
         }
@@ -94,6 +116,8 @@ export default function Portfolio() {
     const handleSellWallet = async (): Promise<void> => {
         try {
             await walletService.sellWallet(sellWallet);
+            fetchWallet();
+            fetchUser();
         } catch (error) {
             console.error('Error selling wallet:', error);
         }
@@ -102,6 +126,8 @@ export default function Portfolio() {
     const handleTradeWallet = async (): Promise<void> => {
         try {
             await walletService.tradeWallet(tradeWallet);
+            fetchWallet();
+            fetchUser();
         } catch (error) {
             console.error('Error trading wallet:', error);
         }
@@ -126,12 +152,14 @@ export default function Portfolio() {
                     >
                         Sell Coin
                     </button>
-                    <button
-                        onClick={() => openModal("trade_coin")}
-                        className="text-white py-2 px-4 uppercase rounded bg-gray-700 hover:bg-gray-900 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
-                    >
-                        Trade
-                    </button>
+                    {currency.length !== 0 && (
+                        <button
+                            onClick={() => openModal("trade_coin")}
+                            className="text-white py-2 px-4 uppercase rounded bg-gray-700 hover:bg-gray-900 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
+                        >
+                            Trade
+                        </button>
+                    )}
                     <dialog id="add_coin" className="modal">
                         <div className="modal-box">
                             <form method="dialog">
@@ -202,25 +230,6 @@ export default function Portfolio() {
                                 <input type="number" placeholder="Your amount" className="input input-bordered w-full"
                                     onChange={(e) => setSellWallet({ ...sellWallet, amount: parseInt(e.target.value) })}
                                 />
-                            </label>
-                            <label className="form-control w-full">
-                                <div className="label">
-                                    <span className="label-text">Select who do you want to transfer</span>
-                                </div>
-                                <select
-                                    className="select select-bordered"
-                                    onChange={(e) => handleSelectChange(e, setSellWallet)}
-                                    value={sellWallet.coin_id}
-                                >
-                                    <option disabled value="">
-                                        Pick one
-                                    </option>
-                                    {coin.map((item) => (
-                                        <option key={item.id} value={item.id}>
-                                            {item.name}
-                                        </option>
-                                    ))}
-                                </select>
                             </label>
                             <div className="flex justify-end">
                                 <button onClick={handleSellWallet} className="mt-5 bg-blue-500 p-3 text-white rounded-2xl hover:bg-blue-600 duration-100">Submit</button>
