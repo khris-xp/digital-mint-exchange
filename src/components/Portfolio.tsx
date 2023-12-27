@@ -105,27 +105,44 @@ export default function Portfolio() {
 
     const handleCreateWallet = async (): Promise<void> => {
         try {
-            await walletService.createWallet(createWallet);
+            const response = await walletService.createWallet(createWallet);
+            if (response) {
+                alert("Wallet added!");
+            } else {
+                alert("Wallet not added!");
+            }
             fetchWallet();
             fetchUser();
         } catch (error) {
-            console.error('Error creating wallet:', error);
+            alert("Wallet not added!");
+            console.log(error);
         }
     };
 
     const handleSellWallet = async (): Promise<void> => {
         try {
-            await walletService.sellWallet(sellWallet);
+            const response = await walletService.sellWallet(sellWallet);
+            if (response) {
+                alert("Wallet sold!");
+            } else {
+                alert("Wallet not sold!");
+            }
             fetchWallet();
             fetchUser();
         } catch (error) {
             console.error('Error selling wallet:', error);
+            alert("Wallet not sold!");
         }
     };
 
     const handleTradeWallet = async (): Promise<void> => {
         try {
-            await walletService.tradeWallet(tradeWallet);
+            const response = await walletService.tradeWallet(tradeWallet);
+            if (response) {
+                alert("Wallet traded!");
+            } else {
+                alert("Wallet not traded!");
+            }
             fetchWallet();
             fetchUser();
         } catch (error) {

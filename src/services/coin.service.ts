@@ -4,7 +4,7 @@ import { CreateCoinType, UpdateCoinType } from "@/types/request.type";
 
 export const coinService = {
     getAllCoins: async (): Promise<CoinType[]> => {
-        return apiRepository<CoinType[]>('/coins', 'get');
+        return apiRepository<CoinType[]>('/coin', 'get');
     },
     getCoinById: async (id: string): Promise<CoinType> => {
         return apiRepository<CoinType>(`/coin/${id}`, 'get')
